@@ -12,21 +12,24 @@
         android:layout_height="wrap_content"/>
     <!-- //end 타이틀바 -->
 
-    <!-- Notice -->
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:orientation="horizontal"
-        android:padding="0dp">
+        android:layout_height="300dp">
 
         <com.google.android.youtube.player.YouTubePlayerView
             android:id="@+id/playerView"
             android:layout_width="500dp"
             android:layout_height="300dp"
-            android:layout_marginTop="5dp" />
+            android:visibility="invisible">
+        </com.google.android.youtube.player.YouTubePlayerView>
 
-    </LinearLayout>
-    <!-- Notice -->
+        <EditText
+            android:id="@+id/text1"
+            android:layout_width="500dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="" />
+    </FrameLayout>
 
     <View
         android:background="#66bdbdbd"
@@ -39,7 +42,6 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <Button
             android:layout_width="238dp"
             android:layout_height="53dp"
@@ -48,6 +50,17 @@
             android:onClick="okClick"
             android:padding="16dp"
             android:text="확인"
+            android:textColor="#00BCD4"
+            android:textSize="15sp" />
+
+        <Button
+            android:layout_width="238dp"
+            android:layout_height="53dp"
+            android:background="#00000000"
+            android:gravity="center"
+            android:onClick="closeClick"
+            android:padding="16dp"
+            android:text="닫기"
             android:textColor="#00BCD4"
             android:textSize="15sp" />
 

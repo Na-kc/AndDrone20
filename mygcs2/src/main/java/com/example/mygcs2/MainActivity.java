@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void btnstream(View view) {
-        Intent intent = new Intent(this, YoutubePlayer.class);
+        Intent intent = new Intent(this, PlayerActivity.class);
         startActivityForResult(intent, 1);
     }
 
@@ -909,14 +909,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             waypoint.setCoordinate(latLongAlt);
 
             this.droneMission.addMissionItem(waypoint);
-
+            /*
             if(i%2 == 0){
                 droneMission.addMissionItem(trueGrip);
             }
             else{
                 droneMission.addMissionItem(falseGrip);
             }
-
+            */
         }
         MissionApi.getApi(this.drone).setMission(this.droneMission, true);
     }
@@ -1092,6 +1092,54 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         naverMap.setMapType(NaverMap.MapType.Basic);
     }
 
+    public void onSubOnBtnTap(View view){
+        this.droneMission = new Mission();
+        EpmGripper trueGrip = new EpmGripper();
+        trueGrip.setRelease(true);
+        droneMission.addMissionItem(trueGrip);
+        MissionApi.getApi(this.drone).setMission(this.droneMission, true);
+        VehicleApi.getApi(this.drone).setVehicleMode(VehicleMode.COPTER_AUTO, new SimpleCommandListener() {
+            @Override
+            public void onSuccess() {
+                alertUser("Auto 모드로 변경 중...");
+            }
+
+            @Override
+            public void onError(int executionError) {
+                alertUser("Auto 모드로 변경 실패 : " + executionError);
+            }
+
+            @Override
+            public void onTimeout() {
+                alertUser("Auto 모드로 변경 실패.");
+            }
+        });
+    }
+
+    public void onSubOffBtnTap(View view){
+        this.droneMission = new Mission();
+        EpmGripper falseGrip = new EpmGripper();
+        falseGrip.setRelease(false);
+        droneMission.addMissionItem(falseGrip);
+        MissionApi.getApi(this.drone).setMission(this.droneMission, true);
+        VehicleApi.getApi(this.drone).setVehicleMode(VehicleMode.COPTER_AUTO, new SimpleCommandListener() {
+            @Override
+            public void onSuccess() {
+                alertUser("Auto 모드로 변경 중...");
+            }
+
+            @Override
+            public void onError(int executionError) {
+                alertUser("Auto 모드로 변경 실패 : " + executionError);
+            }
+
+            @Override
+            public void onTimeout() {
+                alertUser("Auto 모드로 변경 실패.");
+            }
+        });
+    }
+
     public void initLayout(){
         initAltitudeButton();
         initDroneMarker();
@@ -1123,7 +1171,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void initDroneMarker(){
-        droneMarker.setIcon(OverlayImage.fromResource(R.drawable.dronearrow));
+        droneMarker.setIcon(OverlayImage.fromResource(R.drawable.drone));
         droneMarker.setAnchor(new PointF(0.5f, 0.5f));
         droneMarker.setWidth(100);
         droneMarker.setHeight(330);

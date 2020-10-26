@@ -2,9 +2,12 @@ package com.example.mygcs2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -14,7 +17,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 public class PlayerActivity extends YouTubeBaseActivity {
     YouTubePlayerView PlayerView;
-
+    EditText TextView;
     YouTubePlayer.OnInitializedListener listener;
 
     @Override
@@ -32,12 +35,16 @@ public class PlayerActivity extends YouTubeBaseActivity {
         Intent intent = getIntent();
         String data = intent.getStringExtra("data");
 
-
+        TextView = (EditText)findViewById(R.id.text1);
         PlayerView = findViewById(R.id.playerView);
         listener = new YouTubePlayer.OnInitializedListener() {
             @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo("RCZWxUXa_i8"); //
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+                if (!wasRestored) {
+                    Editable Url1 = TextView.getText();
+                    youTubePlayer.loadVideo(String.valueOf(Url1));
+                }
+
                 //https://www.youtube.com/watch?v=NmkYHmiNArc 유투브에서 v="" 이부분이 키에 해당
             }
 
@@ -46,11 +53,21 @@ public class PlayerActivity extends YouTubeBaseActivity {
 
             }
         };
-        PlayerView.initialize("아무키", listener);
+
     }
 
     //확인 버튼 클릭
     public void okClick(View v){
+        //데이터 전달하기
+        Intent intent = new Intent();
+        //intent.putExtra("result", "Close Popup");
+        setResult(RESULT_CANCELED, intent);
+        TextView.setVisibility(View.INVISIBLE);
+        PlayerView.setVisibility(View.VISIBLE);
+        PlayerView.initialize("아무키", listener);
+    }
+
+    public void closeClick(View v){
         //데이터 전달하기
         Intent intent = new Intent();
         //intent.putExtra("result", "Close Popup");
